@@ -1,0 +1,16 @@
+{
+    "name": "erkinduran/candidatetest",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "erkinduran",
+            "email": "erkinduran@gmail.com"
+        }
+    ],
+    "require": {}
+}
