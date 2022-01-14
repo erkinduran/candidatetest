@@ -24,8 +24,12 @@
         require $filename;
     }
     
+    $db = new \App\Core\DB();
+    
     $app    = new App();
     $output = $app->run ();
+    
+    $db::close ();
     
     if ( is_array ( $output ) )
     {

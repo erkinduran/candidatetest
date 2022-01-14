@@ -100,13 +100,62 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-12">
+		<table class="table table-striped table-hovered">
+			<thead>
+			<tr>
+				<td>Bag Cost</td>
+				<td>Measurement Unit</td>
+				<td>Depth Measurement Unit</td>
+				<td>Width</td>
+				<td>Length</td>
+				<td>Depth</td>
+				<td>Bags Of Top Soil</td>
+				<td>Total Cost</td>
+				<td>Date</td>
+			</tr>
+			</thead>
+			<tbody id="oldResults"></tbody>
+		</table>
+	</div>
+</div>
+
 <script src="<?= url ( 'public/js/jquery.js' ) ?>"></script>
 
 <script>
 	$ ( function ()
 	{
 		$ ( '[selectAll]' ).focus ( function () { $ ( this ).select (); } );
+		
+		getCalculations();
 	} );
+	
+	function getCalculations(){
+		$.ajax({
+			url: '<?=url('getCalculations')?>',
+			method: 'GET',
+		}).then(res=>{
+			if(res.status === true){
+				console.log (res.message);
+				$("#oldResults").html(
+					res.message.map(item=>`
+						<tr>
+							<td>${item.bag_cost}</td>
+							<td>${item.measurement}</td>
+							<td>${item.depth_measurement}</td>
+							<td>${item.width}</td>
+							<td>${item.length}</td>
+							<td>${item.depth}</td>
+							<td>${item.bags_of_top_soil}</td>
+							<td>${item.total_cost}</td>
+							<td>${item.created_at}</td>
+						</tr>
+					`)
+				)
+			}
+		})
+	}
 
 	function calc ()
 	{
@@ -116,14 +165,7 @@
 		const width             = $ ( '#width' ).val ();
 		const length            = $ ( '#length' ).val ();
 		const depth             = $ ( '#depth' ).val ();
-		console.log ( {
-			bag_cost         : bag_cost,
-			measurement      : measurement,
-			depth_measurement: depth_measurement,
-			width            : width,
-			length           : length,
-			depth            : depth,
-		} );
+		
 		$.ajax ( {
 			url   : '<?= url ( 'calc' ) ?>',
 			method: 'post',
@@ -143,6 +185,7 @@
 				$ ( '#result' ).removeClass ( 'hidden' );
 				$ ( '#bagsOfTopSoil' ).text ( r.bagsOfTopSoil );
 				$ ( '#totalCost' ).text ( r.totalCost.numberFormat () );
+				getCalculations();
 			}
 		} );
 	}
