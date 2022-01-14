@@ -8,11 +8,6 @@
         public $depthMeasurement;
         public $dimension;
         
-        public function index ()
-        {
-            return view ( "index" );
-        }
-        
         public function setMeasurement ( $measure )
         {
             $this->measure = $measure;
@@ -27,12 +22,12 @@
         {
             $this->dimension = $dimension;
         }
-    
+        
         public function calc ()
         {
         
         }
-    
+        
         public function save ()
         {
         

@@ -1,4 +1,5 @@
 <?php
     return [
-        "/" => [\App\Bags\Calculate::class,"index"]
+        "/" => [\App\Front\Home::class,"index"],
+        "/calc" => [\App\Front\Home::class,"calc"],
     ];
