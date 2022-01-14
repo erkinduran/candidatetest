@@ -5,7 +5,7 @@
         function r ( $query, $message = NULL, $failedmessage = NULL, $dmessage = NULL )
         {
             $result = [
-                "durum" => $query ? TRUE : FALSE,
+                "status"  => $query ? TRUE : FALSE,
                 "message" => $query ? $message : $failedmessage,
             ];
             if ( $dmessage ) $result[ "dmessage" ] = $dmessage;

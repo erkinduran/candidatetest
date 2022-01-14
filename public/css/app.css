@@ -1,3 +1,7 @@
-.p-15{
+.hidden {
+    display: none;
+}
+
+.p-15 {
     padding: 15px;
 }

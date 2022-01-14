@@ -21,7 +21,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="basic-addon1">£</span>
 					</div>
-					<input type="text" class="form-control" aria-describedby="basic-addon1" selectAll value="72">
+					<input type="text" id="bag_cost" class="form-control" aria-describedby="basic-addon1" selectAll value="72">
 				</div>
 
 				<div class="form-group">
@@ -35,7 +35,7 @@
 
 				<div class="form-group">
 					<label for="">Depth measurement unit</label>
-					<select name="depth_measurement" id="" class="form-control">
+					<select id="depth_measurement" class="form-control">
 						<option value="centimeter">Centimeter</option>
 						<option value="inch">Inch</option>
 					</select>
@@ -53,18 +53,40 @@
 
 				<div class="form-group">
 					<label for="">Width</label>
-					<input type="number" name="width" class="form-control" min="0" selectAll value="0">
+					<input type="number" id="width" class="form-control" min="0" selectAll value="0">
 				</div>
 
 				<div class="form-group">
 					<label for="">Length</label>
-					<input type="number" name="length" class="form-control" min="0" selectAll value="0">
+					<input type="number" id="length" class="form-control" min="0" selectAll value="0">
 				</div>
 
 				<div class="form-group">
 					<label for="">Depth</label>
-					<input type="number" name="depth" class="form-control" min="0" selectAll value="0">
+					<input type="number" id="depth" class="form-control" min="0" selectAll value="0">
 				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="col-md-3 hidden" id="result">
+
+		<div class="card" style="width: 18rem;">
+			<div class="card-header">Result</div>
+			<div class="card-body">
+
+				<table class="table">
+					<tr>
+						<td>Bags Of Top Soil</td>
+						<td id="bagsOfTopSoil"></td>
+					</tr>
+					<tr>
+						<td>Total Cost</td>
+						<td id="totalCost"></td>
+					</tr>
+				</table>
 
 			</div>
 		</div>
@@ -88,27 +110,57 @@
 
 	function calc ()
 	{
-		const measurement       = $ ( 'measurement' ).val ();
-		const depth_measurement = $ ( 'depth_measurement' ).val ();
-		const width             = $ ( 'width' ).val ();
-		const length            = $ ( 'length' ).val ();
-		const depth             = $ ( 'depth' ).val ();
-
+		const bag_cost          = $ ( '#bag_cost' ).val ();
+		const measurement       = $ ( '#measurement' ).val ();
+		const depth_measurement = $ ( '#depth_measurement' ).val ();
+		const width             = $ ( '#width' ).val ();
+		const length            = $ ( '#length' ).val ();
+		const depth             = $ ( '#depth' ).val ();
+		console.log ( {
+			bag_cost         : bag_cost,
+			measurement      : measurement,
+			depth_measurement: depth_measurement,
+			width            : width,
+			length           : length,
+			depth            : depth,
+		} );
 		$.ajax ( {
 			url   : '<?= url ( 'calc' ) ?>',
 			method: 'post',
 			data  : {
-				measurement      : measurement
-				depth_measurement: depth_measurement
-				width            : width
-				length           : length
+				bag_cost         : bag_cost,
+				measurement      : measurement,
+				depth_measurement: depth_measurement,
+				width            : width,
+				length           : length,
 				depth            : depth,
 			},
 		} ).then ( res =>
 		{
-			console.log (res);
+			if ( res.status === true )
+			{
+				const r = res.message;
+				$ ( '#result' ).removeClass ( 'hidden' );
+				$ ( '#bagsOfTopSoil' ).text ( r.bagsOfTopSoil );
+				$ ( '#totalCost' ).text ( r.totalCost.numberFormat () );
+			}
 		} );
 	}
+
+	Number.prototype.numberFormat = function ()
+	{
+		const price           = this;
+		const currency_symbol = '₺';
+		const formattedOutput = new Intl.NumberFormat ( 'en-US', {
+			style                : 'currency',
+			currency             : 'GBP',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0,
+		} );
+
+		return formattedOutput.format ( price ).replace ( currency_symbol, '' );
+	};
+
 </script>
 
 </body>

@@ -24,5 +24,22 @@
         require $filename;
     }
     
-    $app = new App();
-    echo $app->run ();
+    $app    = new App();
+    $output = $app->run ();
+    
+    if ( is_array ( $output ) )
+    {
+        header ( "Content-type: application/json; charset=utf-8" );
+        
+        echo json_encode ( $output );
+    }
+    else if ( is_object ( $output ) )
+    {
+        header ( "Content-type: application/json; charset=utf-8" );
+        
+        echo json_encode ( $output );
+    }
+    else
+    {
+        echo $output;
+    }
